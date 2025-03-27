@@ -36,4 +36,23 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+router.get("/search", async (req, res) => {
+    const {searchTerm} = req.query;
+
+    const searchQuery = {
+        $or: [
+            { name: { $regex: searchTerm, $options: "i" } },
+            { engine: { $regex: searchTerm, $options: "i" } },
+            { numberOfDoors: parseFloat(searchTerm) }
+        ]
+    };
+
+
+    const cars = await Car.find(searchQuery);
+
+
+
+
+    res.json(cars);
+})
 module.exports = router;
